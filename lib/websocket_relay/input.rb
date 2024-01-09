@@ -12,7 +12,11 @@ module WebsocketRelay
 
     def call
       @endpoint.accept do |client|
-        payload = JSON.parse(client.read, symbolize_names: true)
+        message = client.read
+        next unless message
+        next if message.empty?
+
+        payload = JSON.parse(message, symbolize_names: true)
         send_request(payload)
       rescue JSON::ParserError
         puts "Invalid JSON: #{payload}"

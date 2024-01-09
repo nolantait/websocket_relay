@@ -10,6 +10,7 @@ require "protocol/websocket/json_message"
 require_relative "websocket_relay/version"
 require_relative "websocket_relay/input"
 require_relative "websocket_relay/output"
+require_relative "websocket_relay/server"
 
 module WebsocketRelay
   class Error < StandardError; end
@@ -17,7 +18,7 @@ module WebsocketRelay
 
   def self.call(url:, port:)
     Async do |task|
-      WebSocket.call(url:, port:, task:)
+      Server.call(url:, port:, task:)
     end
   end
 end

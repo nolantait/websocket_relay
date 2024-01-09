@@ -1,6 +1,5 @@
-require "debug"
 require "socket"
-require "protocol/websocket/json_message"
+require "json"
 
 client = TCPSocket.new("localhost", 4481)
 
@@ -11,9 +10,7 @@ payload = {
   params: []
 }
 
-Protocol::WebSocket::JSONMessage.generate(payload).tap do |message|
-  puts "Sending #{message.to_h}"
-  client.write(message.to_h.to_json)
-end
-
+client.write(nil) # Ignores nil messages
+client.write("") # Ignores empty messages
+client.write(JSON.generate(payload))
 client.close
