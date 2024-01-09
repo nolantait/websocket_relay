@@ -2,7 +2,7 @@ require "debug"
 require "socket"
 require "json"
 
-client = TCPSocket.new("localhost", 4481)
+require "./lib/websocket_relay"
 
 payload = {
   id: 1,
@@ -11,10 +11,10 @@ payload = {
   params: []
 }
 
-client.write(nil) # Ignores nil messages
-client.write("") # Ignores empty messages
-client.write(JSON.generate(payload))
-client.close_write
-response = client.read
+response = WebsocketRelay.send_message(
+  host: "localhost",
+  port: 4481,
+  message: payload
+)
+
 puts "Response: #{response}"
-client.close

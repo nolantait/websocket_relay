@@ -21,4 +21,13 @@ module WebsocketRelay
       Server.call(url:, port:, task:)
     end
   end
+
+  def self.send_message(host:, port:, message:)
+    client = TCPSocket.new(host, port)
+    client.write(JSON.generate(message))
+    client.close_write
+    client.read.tap do |response|
+      client.close
+    end
+  end
 end
