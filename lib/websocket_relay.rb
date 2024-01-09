@@ -16,9 +16,9 @@ module WebsocketRelay
   class Error < StandardError; end
   # Your code goes here...
 
-  def self.call(url:, port:)
+  def self.call(url:, port:, &block)
     Async do |task|
-      Server.call(url:, port:, task:)
+      Server.call(url:, port:, task:, &block)
     end
   end
 

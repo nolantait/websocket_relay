@@ -26,7 +26,6 @@ module WebsocketRelay
 
     def send_request(payload)
       message = Protocol::WebSocket::JSONMessage.generate(payload)
-      puts "Sending #{message.to_h}"
       message.send(@websocket).tap do |response|
         @websocket.flush
       end

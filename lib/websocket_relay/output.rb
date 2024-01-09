@@ -1,18 +1,17 @@
 module WebsocketRelay
   class Output
-    def self.call(websocket)
-      new(websocket).call
+    def self.call(websocket, &block)
+      new(websocket).call(&block)
     end
 
     def initialize(websocket)
       @websocket = websocket
     end
 
-    def call
+    def call(&block)
       while message = @websocket.read
         next unless message = Protocol::WebSocket::JSONMessage.wrap(message)
-
-        puts "Received #{message.to_h}"
+        block.call(message.to_h)
       end
     end
   end

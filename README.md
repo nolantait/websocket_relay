@@ -19,8 +19,10 @@ require "websocket_relay"
 
 WebsocketRelay.call(
   url: "ws://localhost:8545", # The url to relay
-  port: 4481 # Which port on localhost to relay the connection from
-)
+  port: 4481                  # Which port on localhost to relay the connection from
+) do |message|
+  puts "MESSAGE: #{message}"  # Do something with each message
+end
 ```
 
 Sending a message to the relay and receiving a response:
