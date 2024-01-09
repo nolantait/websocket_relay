@@ -17,16 +17,17 @@ module WebsocketRelay
         next if message.empty?
 
         payload = JSON.parse(message, symbolize_names: true)
-        send_request(payload)
+        response = send_request(payload)
+        client.write(response.unpack)
       rescue JSON::ParserError
         puts "Invalid JSON: #{payload}"
       end
     end
 
     def send_request(payload)
-      Protocol::WebSocket::JSONMessage.generate(payload).tap do |message|
-        puts "Sending #{message.to_h}"
-        message.send(@websocket)
+      message = Protocol::WebSocket::JSONMessage.generate(payload)
+      puts "Sending #{message.to_h}"
+      message.send(@websocket).tap do |response|
         @websocket.flush
       end
     end

@@ -1,3 +1,4 @@
+require "debug"
 require "./lib/websocket_relay"
 
 WebsocketRelay.call(

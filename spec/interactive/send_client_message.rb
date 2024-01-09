@@ -1,3 +1,4 @@
+require "debug"
 require "socket"
 require "json"
 
@@ -13,4 +14,7 @@ payload = {
 client.write(nil) # Ignores nil messages
 client.write("") # Ignores empty messages
 client.write(JSON.generate(payload))
+client.close_write
+response = client.read
+puts "Response: #{response}"
 client.close
