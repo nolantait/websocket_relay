@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
+require "dotenv/load"
 require "socket"
 require "async"
+require "async/io"
 require "async/io/stream"
 require "async/http/endpoint"
 require "async/websocket/client"
@@ -17,17 +19,16 @@ module WebsocketRelay
   # Your code goes here...
 
   def self.call(url:, port:, &block)
-    Async do |task|
-      Server.call(url:, port:, task:, &block)
-    end
+    Server.call(url:, port:, &block)
   end
 
   def self.send_message(host:, port:, message:)
-    client = TCPSocket.new(host, port)
-    client.write(JSON.generate(message))
-    client.close_write
-    client.read.tap do |response|
-      client.close
+    Sync do
+      Async::IO::Endpoint.tcp(host, port).connect do |client|
+        payload = JSON.generate(message)
+        client.write(payload)
+        client.close_write
+      end
     end
   end
 end

@@ -17,15 +17,17 @@ Starting the server:
 ```ruby
 require "websocket_relay"
 
-WebsocketRelay.call(
-  url: "ws://localhost:8545", # The url to relay
-  port: 4481                  # Which port on localhost to relay the connection from
-) do |message|
-  puts "MESSAGE: #{message}"  # Do something with each message
+Async do
+    WebsocketRelay.call(
+      url: "ws://localhost:8545", # The url to relay
+      port: 4481                  # Which port on localhost to relay the connection from
+    ) do |message|
+      puts "MESSAGE: #{message}"  # Do something with each message
+    end
 end
 ```
 
-Sending a message to the relay and receiving a response:
+Sending a message to the relay:
 
 ```ruby
 require "websocket_relay"
@@ -37,13 +39,11 @@ payload = {
   params: []
 }
 
-response = WebsocketRelay.send_message(
+WebsocketRelay.send_message(
   host: "localhost",
   port: 4481,
   message: payload
 )
-
-puts "Response: #{response}"
 ```
 
 ## Development
