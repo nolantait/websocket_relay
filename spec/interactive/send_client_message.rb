@@ -1,7 +1,3 @@
-require "debug"
-require "socket"
-require "json"
-
 require "./lib/websocket_relay"
 
 payload = {
